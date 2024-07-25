@@ -1,0 +1,153 @@
+﻿@model AgentViewModel
+@{
+    ViewData["Title"] = "Bootstrap Table";
+}
+
+@section Styles {
+    <link href="~/lib/bootstrap-table/bootstrap-table.min.css" rel="stylesheet" />
+}
+
+<div class="card shadow-sm" id="agentsRoot">
+    <div class="card-header fw-light bg-light ">
+        <div class="d-flex justify-content-between">
+            <h3>Agents</h3>
+            <div class="mt-2">
+                <button type="button" class="btn btn-sm border rounded action-btn" data-bs-toggle="collapse" data-bs-target="#agentFormWrapper" id="addBtn">
+                    <i class="fas fa-plus text-info"></i>
+                    <span class="ps-1">Add</span>
+                </button>
+            </div>
+        </div>
+        <div class="collapse" id="agentFormWrapper">
+            <div class="border rounded bg-white shadow-sm my-4">
+                <form method="post" class="row m-2 fw-normal" asp-controller="Home" asp-action="SaveAgent" id="agentForm">
+                    @Html.AntiForgeryToken()
+                    <input name="Id" type="hidden" value="0" />
+                    <div class="d-flex text-warning" asp-validation-summary="All">
+                    </div>
+                    <div class="col-md-6 col-lg-4 my-3">
+                        <div class="row">
+                            <label class="col-3 col-form-label">Name</label>
+                            <div class="col-9 form-group">
+                                <input class="form-control" asp-for="Name" />
+                                <span class="text-danger" asp-validation-for="Name"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4 my-3">
+                        <div class="row">
+                            <label class="col-3 col-form-label">Position</label>
+                            <div class="col-9 form-group">
+                                <input class="form-control" asp-for="Position" />
+                                <span class="text-danger" asp-validation-for="Position"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4 my-3">
+                        <div class="row">
+                            <label class="col-3 col-form-label">Office</label>
+                            <div class="col-9 form-group">
+                                <input class="form-control" asp-for="Office" />
+                                <span class="text-danger" asp-validation-for="Office"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4 my-3">
+                        <div class="row">
+                            <label class="col-3 col-form-label">Age</label>
+                            <div class="col-9 form-group">
+                                <input type="number" class="form-control" asp-for="Age" />
+                                <span class="text-danger" asp-validation-for="Age"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4 my-3">
+                        <div class="row">
+                            <label class="col-3 col-form-label">Start Date</label>
+                            <div class="col-9 form-group">
+                                <input type="date" class="form-control" asp-for="StartDate" />
+                                <span class="text-danger" asp-validation-for="StartDate"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4 my-3">
+                        <div class="row">
+                            <label class="col-3 col-form-label">Salary</label>
+                            <div class="col-9 form-group">
+                                <input type="number" class="form-control" asp-for="Salary" />
+                                <span class="text-danger" asp-validation-for="Salary"></span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="row m-2">
+                    <ul class="list-group list-group-horizontal list-group-flush justify-content-center">
+                        <li class="list-group-item border-0">
+                            <button type="button" class="btn btn-sm btn-light border rounded action-btn" id="saveBtn">
+                                <i class="fas fa-save text-info"></i>
+                                <span class="ps-1">Save</span>
+                            </button>
+                        </li>
+                        <li class="list-group-item border-0">
+                            <button type="button" class="btn btn-sm btn-light border rounded action-btn"
+                                    data-bs-toggle="collapse" data-bs-target="#agentFormWrapper" id="cancelBtn">
+                                <i class="fas fa-cancel text-danger"></i>
+                                <span class="ps-1">Cancel</span>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <table id="agents" 
+            data-toggle="table"
+            data-search="true"
+            data-show-columns="true"
+            data-ajax="getAgents"
+            data-pagination="true"
+            data-side-pagination="server"
+            data-sortable="true"
+            data-page-list="[10, 25, 50, 100, 500]"
+            style="width:100%">
+            <thead>
+                <tr>
+                    <th data-field="Id"
+                        data-checkbox="true"
+                        data-searchable="false"
+                        data-sortable="false"></th>
+                    <th data-field="Name"
+                        data-sortable="true">Name</th>
+                    <th data-field="Position"
+                        data-sortable="true">Position</th>
+                    <th data-field="Office"
+                        data-sortable="true">Office</th>
+                    <th data-field="Age"
+                        data-sortable="true">Age</th>
+                    <th data-field="StartDate"
+                        data-sortable="true">Start Date</th>
+                    <th data-field="Salary"
+                        data-sortable="true"
+                        data-sort-order="desc">Salary</th>
+                    <th data-field=""
+                        data-sortable="false"
+                        data-searchable="false">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <small class="text-center">Built on top of <a class="text-info" href="https://github.com/wenzhixin/bootstrap-table/">bootstrap-table</a></small>
+
+@section Scripts {
+    <script src="~/js/custom_bt_modifications.js"></script>
+    <script src="~/lib/bootstrap-table/bootstrap-table.min.js"></script>
+}

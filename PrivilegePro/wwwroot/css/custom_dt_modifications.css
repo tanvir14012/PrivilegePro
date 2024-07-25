@@ -1,0 +1,211 @@
+﻿/* Style a select-all checkbox in the column header */
+table.dataTable > thead > tr > td.select-checkbox,
+table.dataTable > thead > tr > th.select-checkbox {
+    position: relative;
+}
+
+    table.dataTable > thead > tr > th.select-checkbox:before {
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 12px;
+        height: 12px;
+        box-sizing: border-box;
+        content: " ";
+        margin-top: -6px;
+        margin-left: -6px;
+        border: 1px solid;
+        border-radius: 3px;
+    }
+
+table.dataTable > thead > tr.selected > th.select-checkbox:before {
+    border: 1px solid;
+    content: "✓";
+    font-size: 20px;
+    line-height: 4px;
+    text-align: center;
+    font-weight: normal;
+}
+
+table.dataTable.compact > thead > tr > th.select-checkbox:before {
+    margin-top: -12px;
+}
+
+table.dataTable.compact > thead > tr.selected > th.select-checkbox:after {
+    margin-top: -16px;
+}
+/* Style a select-all checkbox in the column header <section end> */
+
+
+:root {
+    --dt-row-selected: 247, 252, 254;
+    --dt-row-selected-text: 29,29,27;
+    --dt-row-selected-link: 9, 10, 11;
+    --dt-row-stripe: 230, 230, 230;
+    --dt-row-hover: 155,150,245;
+    --dt-column-ordering: 0, 0, 0;
+    --dt-html-background: white;
+}
+
+table.dataTable > thead > tr > th {
+    text-align: left !important;
+}
+
+/* Style all DataTables buttons */
+.dt-buttons button {
+    background-color: white; /* Green background */
+    color: black !important; /* White text */
+    text-align: center; /* Center text */
+    text-decoration: none; /* Remove underline */
+    display: inline-block; /* Display as inline-block */
+    font-size: 16px; /* Font size */
+    margin: 16px 8px 8px 0px;
+    cursor: pointer; /* Pointer cursor */
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 4px !important; /* Rounded corners */
+}
+
+    .dt-buttons button:hover {
+        background-color: #f8f9fa;
+        border: 1px solid #f8f9fa;
+    }
+
+.dropdown-menu .dt-button:hover {
+    background-color: #f8f9fa !important;
+    color: black !important;
+}
+
+.dropdown-menu a:active {
+    background-color: #f8f9fa !important;
+    color: black !important;
+}
+
+.form-control:focus {
+    border-color: #dee2e6;
+    box-shadow: 0 0 0 0.3rem #f8f9fa;
+}
+
+.btn:focus, .btn:active {
+    outline: none !important;
+    box-shadow: 0 0 0 0.3rem #f8f9fa !important;
+    background-color: transparent !important;
+}
+/* Style all DataTables buttons <section end> */
+
+/* Custom DT select menu for length */
+.w-65px {
+    width: 65px;
+}
+
+.h-35px {
+    height: 35px;
+}
+
+.alt-dt-len-selectbox:focus {
+    outline: 5px solid #f8f9fa;
+}
+
+.alt-dt-len-selectbox-arrow-down {
+    display: inline-block;
+    content: "";
+    position: absolute;
+    top: 9px;
+    right: 9px;
+    border-top: 2.5px solid gray !important;
+    border-left: 2.5px solid gray !important;
+    width: 8px;
+    height: 8px;
+    transform: rotate(-135deg);
+}
+
+.alt-dt-len-select-dropdown {
+    margin-top: 27px;
+    border-radius: 9px;
+    z-index: 999;
+}
+
+    .alt-dt-len-select-dropdown > li {
+        cursor: default;
+    }
+
+        .alt-dt-len-select-dropdown > li:hover {
+            background-color: #f8f9fa;
+        }
+
+
+        .alt-dt-len-select-dropdown > li.selected {
+            background-color: #f8f9fa;
+        }
+
+.alt-dt-len-select-dropdown {
+    display: none;
+}
+
+
+/* Custom DT select menu for length <end of section> */
+
+
+/* Change pagination button colors */
+
+.page-link {
+    position: relative;
+    display: block;
+    color: #7358E0;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+
+    .page-link:hover {
+        z-index: 2;
+        color: #7358E0;
+        background-color: #e9ecef;
+        border-color: #dee2e6;
+    }
+
+    .page-link:focus {
+        z-index: 3;
+        color: #283D32;
+        background-color: #e9ecef;
+        outline: 0;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    }
+
+
+.page-item.active .page-link {
+    z-index: 3;
+    color: #fff;
+    background-color: #7358E0;
+    border-color: #7358E0;
+}
+
+.page-item.disabled .page-link {
+    color: darkgray;
+    pointer-events: none;
+    background-color: rgba(0,0,0, 0.1);
+    border-color: #dee2e6;
+}
+
+/* Change pagination button colors <end of section> */
+
+.text-info {
+    color: #7358E0 !important;
+}
+
+.hover-bg-white:hover {
+    background-color: white;
+}
+
+button.action-btn:hover, button.action-btn:focus {
+    background-color: white !important;
+    border: 1px solid #f8f9fa;
+    box-shadow: 0 0 0 0.3rem #f8f9fa !important;
+}
+
+/* Vertically align table cell contents */
+table.dataTable tbody td {
+    vertical-align: middle;
+}
