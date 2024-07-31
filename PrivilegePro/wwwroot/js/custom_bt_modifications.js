@@ -32,8 +32,6 @@
         let columns = [...$("#agents").bootstrapTable("getVisibleColumns"),
             ...$("#agents").bootstrapTable("getHiddenColumns")];
 
-        console.log(columns);
-
         columns = [...columns].sort((a, b) => a.fieldIndex - b.fieldIndex);
         console.log(columns);
 
@@ -86,8 +84,8 @@
         }).then(res => {
             console.log(res);
             const data = {
-                total: res.recordsTotal,
-                totalNotFiltered: res.recordsFiltered,
+                total: res.recordsFiltered,
+                totalNotFiltered: res.recordsTotal - res.recordsFiltered,
                 rows: res.data
             };
 

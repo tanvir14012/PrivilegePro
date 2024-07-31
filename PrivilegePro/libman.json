@@ -60,6 +60,10 @@
     {
       "library": "bootstrap-table@1.23.0",
       "destination": "wwwroot/lib/bootstrap-table/"
+    },
+    {
+      "library": "bootstrap-icons@1.11.3",
+      "destination": "wwwroot/lib/bootstrap-icons/"
     }
   ]
 }

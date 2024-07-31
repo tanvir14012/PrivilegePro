@@ -24,7 +24,7 @@ $(function () {
                     }
                 ]
             },
-            top2End: {
+            topEnd: {
                 buttons: [
                     'colvis',
                     {
@@ -82,7 +82,8 @@ $(function () {
                     }
                 ]
             },
-            topEnd: 'pageLength'
+            bottomStart: 'pageLength',
+            bottom2Start: 'info'
         },
         lengthMenu: lengthArr,
         stateSave: true,

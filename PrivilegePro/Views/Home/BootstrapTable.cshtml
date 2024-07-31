@@ -5,6 +5,7 @@
 
 @section Styles {
     <link href="~/lib/bootstrap-table/bootstrap-table.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet" />
 }
 
 <div class="card shadow-sm" id="agentsRoot">
@@ -107,16 +108,18 @@
     </div>
     <div class="card-body">
 
-        <table id="agents" 
-            data-toggle="table"
-            data-search="true"
-            data-show-columns="true"
-            data-ajax="getAgents"
-            data-pagination="true"
-            data-side-pagination="server"
-            data-sortable="true"
-            data-page-list="[10, 25, 50, 100, 500]"
-            style="width:100%">
+        <table id="agents"
+               data-classes="table table-hover"
+               data-toggle="table"
+               data-search="true"
+               data-show-columns="true"
+               data-page-list="[10, 25, 50, 100, 500]"
+               data-smart-display="false"
+               data-pagination="true"
+               data-ajax="getAgents"
+               data-side-pagination="server"
+               data-sortable="true"
+               style="width:100%">
             <thead>
                 <tr>
                     <th data-field="Id"
@@ -130,11 +133,14 @@
                     <th data-field="Office"
                         data-sortable="true">Office</th>
                     <th data-field="Age"
+                        data-searchable="false"
                         data-sortable="true">Age</th>
                     <th data-field="StartDate"
+                        data-searchable="false"
                         data-sortable="true">Start Date</th>
                     <th data-field="Salary"
                         data-sortable="true"
+                        data-searchable="false"
                         data-sort-order="desc">Salary</th>
                     <th data-field=""
                         data-sortable="false"
@@ -146,6 +152,7 @@
         </table>
     </div>
     <small class="text-center">Built on top of <a class="text-info" href="https://github.com/wenzhixin/bootstrap-table/">bootstrap-table</a></small>
+</div>
 
 @section Scripts {
     <script src="~/js/custom_bt_modifications.js"></script>
