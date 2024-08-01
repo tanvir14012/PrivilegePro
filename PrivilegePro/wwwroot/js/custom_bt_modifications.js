@@ -13,7 +13,7 @@
         });
 
         dtOrder.forEach((order, index) => {
-            data[`order[${index}][column]`] = order.Data;
+            data[`order[${index}][column]`] = order.Column;
             data[`order[${index}][dir]`] = order.Dir === 1 ? "desc" : "asc";
             data[`order[${index}][name]`] = order.Name ?? ""; // Assuming Name is optional
         });
@@ -49,18 +49,19 @@
         let dtOrders = [];
 
         if (typeof(paginationData["order"]) !== 'undefined') {
-            dtOrders = dtColumns.filter((col) => col["Data"] == paginationData.order);
+            dtOrders = dtColumns.filter((col) => col["Data"] == paginationData.sort);
         }
         else {
             dtOrders = dtColumns.filter((col) => col.Index == 1);
         }
-        console.log(dtOrders);
+
         const dtOrder = dtOrders.map((col) => {
             return {
-                Column: col["Index"],
-                Dir: paginationData.sort === "desc" ? 1: 0
+                Column: col["Index"] - 1,
+                Dir: paginationData.order === "desc" ? 1: 0
             }
         });
+        console.log(dtOrders);
 
         const dtSearch = {
             Value: paginationData.search,
