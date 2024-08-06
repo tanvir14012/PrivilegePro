@@ -1,1 +1,2 @@
 # PrivilegePro
+A web app built with ASP.NET 8 MVC and offers comprehensive data management features. Users can create, update, search, filter, and sort records. Additionally, it supports data export in formats like PDF and Excel.
