@@ -64,6 +64,11 @@
     {
       "library": "bootstrap-icons@1.11.3",
       "destination": "wwwroot/lib/bootstrap-icons/"
+    },
+    {
+      "provider": "unpkg",
+      "library": "tableexport.jquery.plugin@1.30.0",
+      "destination": "wwwroot/lib/tableexport.jquery.plugin/"
     }
   ]
 }

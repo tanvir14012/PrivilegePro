@@ -26,14 +26,13 @@
         return data;
     }
     window.getAgents = function (params) {
+
         const paginationData = params.data;
-        console.log(paginationData);
 
         let columns = [...$("#agents").bootstrapTable("getVisibleColumns"),
             ...$("#agents").bootstrapTable("getHiddenColumns")];
 
         columns = [...columns].sort((a, b) => a.fieldIndex - b.fieldIndex);
-        console.log(columns);
 
         let dtColumns = columns.map((col) => {
             return {
@@ -44,11 +43,15 @@
             }
         });
 
-        console.log(dtColumns);
 
         let dtOrders = [];
+        let isMultiSort = false;
 
-        if (typeof(paginationData["order"]) !== 'undefined') {
+        if (typeof (paginationData["multiSort"]) !== 'undefined') {
+            isMultiSort = true;
+            dtOrders = dtColumns.filter(col => paginationData["multiSort"].find(s => s["sortName"] === col["Data"]));
+        }
+        else if (typeof(paginationData["order"]) !== 'undefined') {
             dtOrders = dtColumns.filter((col) => col["Data"] == paginationData.sort);
         }
         else {
@@ -56,12 +59,16 @@
         }
 
         const dtOrder = dtOrders.map((col) => {
+            let dir = paginationData.order === "desc" ? 1 : 0;
+            if (isMultiSort) {
+                dir = paginationData["multiSort"].find(s => s["sortName"] === col["Data"]).sortOrder === 'asc' ? 0 : 1;
+            }
             return {
                 Column: col["Index"] - 1,
-                Dir: paginationData.order === "desc" ? 1: 0
+                Dir: dir
             }
         });
-        console.log(dtOrders);
+
 
         const dtSearch = {
             Value: paginationData.search,
@@ -70,7 +77,7 @@
 
 
         const requestData = getFormattedRequestData(paginationData, dtColumns, dtOrder, dtSearch);
-        console.log(requestData);
+
 
         new Promise((resolve, reject) => {
             $.ajax({
@@ -83,7 +90,6 @@
                 error: reject
             });
         }).then(res => {
-            console.log(res);
             const data = {
                 total: res.recordsFiltered,
                 totalNotFiltered: res.recordsTotal - res.recordsFiltered,
@@ -102,5 +108,38 @@
     $('#agents').on('load-success.bs.table', function () {
         $('#agents').bootstrapTable('uncheckAll');
     });
+
+    $('#agents').on('multiple-sort.bs.table', function (e, sortOptions) {
+        console.log('Multiple sort options:', sortOptions);
+        console.log('Multiple sort options event:', e);
+        //$('#table').bootstrapTable('refresh', { query: { sortOptions: sortOptions } });
+    });
+
+    function actionFormatter(value, row, index) {
+        return `<ul class="list-group list-group-horizontal list-group-flush">
+                        <li class="list-group-item p-0 me-2 rounded">
+                            <a onclick="javascript:void(0)" class="btn btn-light hover-bg-white" data-toggle="tooltip" title="Edit">
+                                <i class="fas fa-edit text-info"></i>
+                            </a>
+                        </li>
+                        <li class="list-group-item p-0 me-2 rounded">
+                            <a onclick="javascript:void(0)" class="btn btn-light hover-bg-white" data-toggle="tooltip" title="Delete">
+                                <i class="fas fa-trash text-danger"></i>
+                            </a>
+                        </li>
+                    </ul>`;
+    }
+
+    // Event handlers for edit and delete buttons
+    window.actionEvents = {
+        'click .edit': function (e, value, row, index) {
+            alert('Edit button clicked for: ' + JSON.stringify(row));
+            // Implement your edit logic here
+        },
+        'click .delete': function (e, value, row, index) {
+            alert('Delete button clicked for: ' + JSON.stringify(row));
+            // Implement your delete logic here
+        }
+    };
 });
 

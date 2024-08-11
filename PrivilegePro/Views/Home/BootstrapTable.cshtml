@@ -6,6 +6,7 @@
 @section Styles {
     <link href="~/lib/bootstrap-table/bootstrap-table.min.css" rel="stylesheet" />
     <link href="~/lib/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap-table/extensions/page-jump-to/bootstrap-table-page-jump-to.min.css" rel="stylesheet" />
 }
 
 <div class="card shadow-sm" id="agentsRoot">
@@ -107,18 +108,37 @@
         </div>
     </div>
     <div class="card-body">
-
+        <div id="toolbar">
+            <div>
+                <label class="form-label col-form-label me-2">Search:</label>
+            </div>
+        </div>
         <table id="agents"
+               data-toolbar="#toolbar"
                data-classes="table table-hover"
                data-toggle="table"
                data-search="true"
-               data-show-columns="true"
+               data-trim-on-search="true"
+               data-search-align="left"
                data-page-list="[10, 25, 50, 100, 500]"
                data-smart-display="false"
                data-pagination="true"
                data-ajax="getAgents"
                data-side-pagination="server"
                data-sortable="true"
+               data-show-multi-sort="true"
+               data-sort-priority='[{"sortName": "Name","sortOrder":"asc"}]'
+               data-show-toggle="true"
+               data-show-columns="true"
+               data-show-refresh="true"
+               data-show-fullscreen="true"
+               data-show-export="true"
+               data-show-print="true"
+               data-show-jump-to="true"
+               data-click-to-select="false"
+               data-id-field="Id"
+               data-export-types="['json', 'xml', 'png', 'csv', 'txt', 'sql', 'doc', 'excel', 'xlsx', 'pdf']"
+
                style="width:100%">
             <thead>
                 <tr>
@@ -143,7 +163,10 @@
                         data-searchable="false"
                         data-sort-order="desc">Salary</th>
                     <th data-field=""
+                        data-formatter="actionFormatter"
+                        data-events="actionEvents"
                         data-sortable="false"
+                        data-force-hide="true"
                         data-searchable="false">Action</th>
                 </tr>
             </thead>
@@ -156,5 +179,16 @@
 
 @section Scripts {
     <script src="~/js/custom_bt_modifications.js"></script>
+    <script src="~/lib/tableexport.jquery.plugin/tableexport.min.js"></script>
+    <script src="~/lib/tableexport.jquery.plugin/libs/jspdf/jspdf.umd.min.js"></script>
+    <script src="~/lib/tableexport.jquery.plugin/libs/html2canvas/html2canvas.min.js"></script>
+    <script src="~/lib/tableexport.jquery.plugin/libs/filesaver/filesaver.min.js"></script>
+    <script src="~/lib/tableexport.jquery.plugin/libs/js-xlsx/xlsx.core.min.js"></script>
     <script src="~/lib/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="~/js/custom_bt_modifications_after.js"></script>
+    <script src="~/lib/bootstrap-table/extensions/multiple-sort/bootstrap-table-multiple-sort.min.js"></script> @*It needs to be loaded after bootstrap-table.min.js *@
+    <script src="~/lib/bootstrap-table/extensions/export/bootstrap-table-export.min.js"></script> @* It needs to be loaded after bootstrap-table.min.js *@
+    <script src="~/lib/bootstrap-table/extensions/print/bootstrap-table-print.min.js"></script>  @* It needs to be loaded after bootstrap-table.min.js *@
+    <script src="~/lib/bootstrap-table/extensions/page-jump-to/bootstrap-table-page-jump-to.min.js"></script>  @* It needs to be loaded after bootstrap-table.min.js *@
+
 }
