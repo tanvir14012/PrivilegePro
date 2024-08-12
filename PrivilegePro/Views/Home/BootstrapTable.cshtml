@@ -7,6 +7,7 @@
     <link href="~/lib/bootstrap-table/bootstrap-table.min.css" rel="stylesheet" />
     <link href="~/lib/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet" />
     <link href="~/lib/bootstrap-table/extensions/page-jump-to/bootstrap-table-page-jump-to.min.css" rel="stylesheet" />
+    <link href="~/lib/font-awesome/css/all.min.css" rel="stylesheet" />
 }
 
 <div class="card shadow-sm" id="agentsRoot">
@@ -108,13 +109,8 @@
         </div>
     </div>
     <div class="card-body">
-        <div id="toolbar">
-            <div>
-                <label class="form-label col-form-label me-2">Search:</label>
-            </div>
-        </div>
+        
         <table id="agents"
-               data-toolbar="#toolbar"
                data-classes="table table-hover"
                data-toggle="table"
                data-search="true"
@@ -138,11 +134,12 @@
                data-click-to-select="false"
                data-id-field="Id"
                data-export-types="['json', 'xml', 'png', 'csv', 'txt', 'sql', 'doc', 'excel', 'xlsx', 'pdf']"
-
+               data-cookie="true"
+               data-cookie-id-table="btAgentState"
                style="width:100%">
             <thead>
                 <tr>
-                    <th data-field="Id"
+                    <th data-field=""
                         data-checkbox="true"
                         data-searchable="false"
                         data-sortable="false"></th>
@@ -162,7 +159,7 @@
                         data-sortable="true"
                         data-searchable="false"
                         data-sort-order="desc">Salary</th>
-                    <th data-field=""
+                    <th data-field="Id"
                         data-formatter="actionFormatter"
                         data-events="actionEvents"
                         data-sortable="false"
@@ -178,6 +175,9 @@
 </div>
 
 @section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
     <script src="~/js/custom_bt_modifications.js"></script>
     <script src="~/lib/tableexport.jquery.plugin/tableexport.min.js"></script>
     <script src="~/lib/tableexport.jquery.plugin/libs/jspdf/jspdf.umd.min.js"></script>
@@ -185,10 +185,9 @@
     <script src="~/lib/tableexport.jquery.plugin/libs/filesaver/filesaver.min.js"></script>
     <script src="~/lib/tableexport.jquery.plugin/libs/js-xlsx/xlsx.core.min.js"></script>
     <script src="~/lib/bootstrap-table/bootstrap-table.min.js"></script>
-    <script src="~/js/custom_bt_modifications_after.js"></script>
     <script src="~/lib/bootstrap-table/extensions/multiple-sort/bootstrap-table-multiple-sort.min.js"></script> @*It needs to be loaded after bootstrap-table.min.js *@
     <script src="~/lib/bootstrap-table/extensions/export/bootstrap-table-export.min.js"></script> @* It needs to be loaded after bootstrap-table.min.js *@
     <script src="~/lib/bootstrap-table/extensions/print/bootstrap-table-print.min.js"></script>  @* It needs to be loaded after bootstrap-table.min.js *@
     <script src="~/lib/bootstrap-table/extensions/page-jump-to/bootstrap-table-page-jump-to.min.js"></script>  @* It needs to be loaded after bootstrap-table.min.js *@
-
+    <script src="~/lib/bootstrap-table/extensions/cookie/bootstrap-table-cookie.min.js"></script>@* It needs to be loaded after bootstrap-table.min.js *@
 }

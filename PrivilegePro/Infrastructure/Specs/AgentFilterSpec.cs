@@ -72,19 +72,32 @@ namespace PrivilegePro.Infrastructure.Specs
         private void ApplySorting(DtOrder[] order, DtColumn[] columns)
         {
             var parameter = Expression.Parameter(typeof(Agent), "agnt");
-            var column = columns[order[0].Column];
-            var property = Expression.Property(parameter, column.Data);
+            IOrderedSpecificationBuilder<Agent> orderedQuery = null;
 
-            var lambda = Expression.Lambda<Func<Agent, object>>(Expression.Convert(property, typeof(object)), parameter);
+            for (int i = 0; i < order.Length; i++)
+            {
+                var column = columns[order[i].Column];
+                var property = Expression.Property(parameter, column.Data);
 
-            if (order[0].Dir == DtOrderDir.Desc)
-            {
-                Query.OrderByDescending(lambda);
+                var lambda = Expression.Lambda<Func<Agent, object>>(Expression.Convert(property, typeof(object)), parameter);
+
+                if (order[i].Dir == DtOrderDir.Desc)
+                {
+                    if(i == 0)
+                        orderedQuery = Query.OrderByDescending(lambda);
+                    else
+                        orderedQuery = orderedQuery.ThenByDescending(lambda);
+                }
+                else
+                {
+                    if (i == 0)
+                        orderedQuery = Query.OrderBy(lambda);
+                    else
+                        orderedQuery = orderedQuery.ThenBy(lambda);
+
+                }
             }
-            else
-            {
-                Query.OrderBy(lambda);
-            }
+            
         }
     }
 }

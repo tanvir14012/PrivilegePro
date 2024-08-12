@@ -25,7 +25,7 @@
 
         return data;
     }
-    window.getAgents = function (params) {
+    window.getAgents = (params) => {
 
         const paginationData = params.data;
 
@@ -47,20 +47,26 @@
         let dtOrders = [];
         let isMultiSort = false;
 
-        if (typeof (paginationData["multiSort"]) !== 'undefined') {
-            isMultiSort = true;
-            dtOrders = dtColumns.filter(col => paginationData["multiSort"].find(s => s["sortName"] === col["Data"]));
-        }
-        else if (typeof(paginationData["order"]) !== 'undefined') {
+        
+        if (typeof(paginationData["order"]) !== 'undefined') {
             dtOrders = dtColumns.filter((col) => col["Data"] == paginationData.sort);
         }
-        else {
-            dtOrders = dtColumns.filter((col) => col.Index == 1);
+
+        if (typeof (paginationData["multiSort"]) !== 'undefined') {
+            isMultiSort = true;
+            dtOrders = dtOrders.concat(dtColumns.filter(col => paginationData["multiSort"].find(s => s["sortName"] === col["Data"])));
+
+            dtOrders = dtOrders.reduce((acc, cur) => {
+                if (!acc.find(o => o["Data"] === cur["Data"])) {
+                    acc.push(cur);
+                }
+                return acc;
+            }, []);
         }
 
         const dtOrder = dtOrders.map((col) => {
             let dir = paginationData.order === "desc" ? 1 : 0;
-            if (isMultiSort) {
+            if (isMultiSort && col["Data"] !== paginationData.sort) {
                 dir = paginationData["multiSort"].find(s => s["sortName"] === col["Data"]).sortOrder === 'asc' ? 0 : 1;
             }
             return {
@@ -109,20 +115,96 @@
         $('#agents').bootstrapTable('uncheckAll');
     });
 
-    $('#agents').on('multiple-sort.bs.table', function (e, sortOptions) {
-        console.log('Multiple sort options:', sortOptions);
-        console.log('Multiple sort options event:', e);
-        //$('#table').bootstrapTable('refresh', { query: { sortOptions: sortOptions } });
+    window.clearAgentForm = () => {
+
+        // Remove validation messages
+        $("#agentForm").find("[data-valmsg-summary=true]")
+            .removeClass("validation-summary-errors")
+            .addClass("validation-summary-valid")
+            .find("ul").empty();
+
+        $("#agentForm").find("[data-valmsg-replace]")
+            .removeClass("field-validation-error")
+            .addClass("field-validation-valid")
+            .empty();
+
+        const valdtnSmryWrpr = $("#agentForm > div[data-valmsg-summary]");
+        valdtnSmryWrpr.addClass("validation-summary-valid")
+            .removeClass("validation-summary-errors");
+
+        $(":input", "#agentForm")
+            .not(":button, :submit, :reset, :hidden")
+            .val("")
+            .prop("checked", false)
+            .prop("selected", false);
+    }
+
+    $("#agentFormWrapper").on("show.bs.collapse", () => {
+        // Enable unobtrusive validation for the form, otherwise the form will get submitted on the collapsible UI toggle
+        $.validator.unobtrusive.parse($("#agentForm"));
+
+        clearAgentForm();
+
+        $("div[data-valmsg-summary] ul").addClass("mx-auto");
+
+        $("#addBtn > span").text("Close");
+        $("#addBtn > i").removeClass("fa-plus").addClass("fa-xmark");
     });
 
-    function actionFormatter(value, row, index) {
+    $("#agentFormWrapper").on("hidden.bs.collapse", () => {
+        $('#agentForm').trigger("reset");
+        $("#agentForm").removeData("validator")    // Remove data-* states added by jQuery Validation
+            .removeData("unobtrusiveValidation"); // Remove data-* states added by jQuery Unobtrusive Validation
+
+        $("#addBtn > span").text("Add");
+        $("#addBtn > i").removeClass("fa-xmark").addClass("fa-plus");
+    });
+
+    // Save
+    $("#agentsRoot #saveBtn").on("click", () => {
+        const form = $("#agentForm");
+        if (form.valid()) {
+            $.ajax({
+                type: form.attr("method"),
+                url: form.attr("action"),
+                data: form.serialize(),
+                headers: {
+                    "X-CSRF-TOKEN": $('#agentForm input:hidden[name="__RequestVerificationToken"]').val()
+                },
+                success: (resp) => {
+                    clearAgentForm();
+                    $("#agents").bootstrapTable("refresh");
+                    clearAgentForm();
+                    alert('Success! The record is saved. Details: ' + JSON.stringify(resp));
+                },
+                error: (err) => {
+                    const errList = err.responseJSON?.errors;
+                    if (Array.isArray(errList)) {
+
+                        const valdtnSmryWrpr = $("#agentForm > div[data-valmsg-summary]");
+                        valdtnSmryWrpr.removeClass("validation-summary-valid")
+                            .addClass("validation-summary-errors");
+
+                        errList.forEach(errMsg => {
+
+                            const li = `<li>${errMsg}</li>`;
+                            $(valdtnSmryWrpr).children("ul").first().append(li);
+                        });
+                    }
+                    alert('Error! The record could not be saved.');
+                }
+            });
+        }
+    });
+
+    window.actionFormatter = (value, row, index) => {
         return `<ul class="list-group list-group-horizontal list-group-flush">
-                        <li class="list-group-item p-0 me-2 rounded">
+                        <li class="list-group-item p-0 me-2 rounded edit">
                             <a onclick="javascript:void(0)" class="btn btn-light hover-bg-white" data-toggle="tooltip" title="Edit">
                                 <i class="fas fa-edit text-info"></i>
                             </a>
                         </li>
-                        <li class="list-group-item p-0 me-2 rounded">
+                        <li class="list-group-item p-0 me-2 rounded delete">
                             <a onclick="javascript:void(0)" class="btn btn-light hover-bg-white" data-toggle="tooltip" title="Delete">
                                 <i class="fas fa-trash text-danger"></i>
                             </a>
@@ -130,6 +212,18 @@
                     </ul>`;
     }
 
+    window.sendDeleteRequest = (ids) => {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: '/home/deleteAgents',
+                method: 'POST',
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(ids),
+                success: resolve,
+                error: reject
+            });
+        });
+    }
     // Event handlers for edit and delete buttons
     window.actionEvents = {
         'click .edit': function (e, value, row, index) {
@@ -137,9 +231,22 @@
             // Implement your edit logic here
         },
         'click .delete': function (e, value, row, index) {
-            alert('Delete button clicked for: ' + JSON.stringify(row));
-            // Implement your delete logic here
+            const response = confirm("Are you sure you want to delete the record(s)? This action cannot be undone.");
+            if (response) {
+                sendDeleteRequest([row.Id])
+                    .then(resp => {
+                        $("#agents").bootstrapTable('remove', {
+                            field: 'Id',
+                            values: [row.Id]
+                        })
+                        alert('The record(s) has been deleted successfully!');
+                    })
+                    .catch(err => {
+                        alert('Error! The record(s) has not been deleted.');
+                    });
+            }
         }
     };
+
 });
 
