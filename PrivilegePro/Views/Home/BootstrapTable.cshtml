@@ -109,7 +109,7 @@
         </div>
     </div>
     <div class="card-body">
-        
+
         <table id="agents"
                data-classes="table table-hover"
                data-toggle="table"
@@ -136,6 +136,9 @@
                data-export-types="['json', 'xml', 'png', 'csv', 'txt', 'sql', 'doc', 'excel', 'xlsx', 'pdf']"
                data-cookie="true"
                data-cookie-id-table="btAgentState"
+               data-show-custom-view="true"
+               data-custom-view="customViewFormatter"
+               data-show-custom-view-button="true"
                style="width:100%">
             <thead>
                 <tr>
@@ -174,6 +177,68 @@
     <small class="text-center">Built on top of <a class="text-info" href="https://github.com/wenzhixin/bootstrap-table/">bootstrap-table</a></small>
 </div>
 
+
+<template id="profileTemplate">
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3 mt-3 mx-0 px-0">
+        <div class="card h-100 me-3">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12 text-center mb-3">
+                        <img src="%IMAGE%" alt="" class="mx-auto rounded-circle img-fluid" style="height: 120px;">
+                    </div>
+                    <div class="col-12 mb-3">
+                        <h3 class="mb-0 text-truncate text-center">%NAME%</h3>
+                        <p class="lead text-center">%POS%</p>
+                        <p>
+                            I love to read, hang out with friends, watch football, listen to music, and learn new things.
+                        </p>
+                        <p>
+                            <span class="badge badge-info tags">html5</span>
+                            <span class="badge badge-info tags">css3</span>
+                            <span class="badge badge-info tags">nodejs</span>
+                        </p>
+                    </div>
+                    <div class="col-12 text-center mb-3">
+                        <ul class="list-inline ratings text-center" title="Ratings">
+                            <li class="list-inline-item">
+                                <a href="#"><span class="fa fa-star"></span></a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#"><span class="fa fa-star"></span></a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#"><span class="fa fa-star"></span></a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#"><span class="fa fa-star"></span></a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#"><span class="fa fa-star"></span></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-4 d-flex flex-column align-items-center mb-3">
+                        <h6 class="mb-0">%SALARY%</h6>
+                        <small>Salary</small>
+                        <button class="btn btn-block btn-outline-success mt-2" title="Follow"><span class="fa fa-plus-circle"></span></button>
+                    </div>
+                    <div class="col-4 d-flex flex-column align-items-center mb-3">
+                        <h6 class="mb-0">%AGE%</h6>
+                        <small>Age</small>
+                        <button class="btn btn-outline-info btn-block mt-2" title="View Profile"><span class="fa fa-user"></span></button>
+                    </div>
+                    <div class="col-4 d-flex flex-column align-items-center mb-3">
+                        <h6 class="mb-0">%OFFICE%</h6>
+                        <small>Office</small>
+                        <button type="button" class="btn btn-outline-primary btn-block mt-2" title="Options"><span class="fa fa-cog"></span></button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
@@ -185,9 +250,12 @@
     <script src="~/lib/tableexport.jquery.plugin/libs/filesaver/filesaver.min.js"></script>
     <script src="~/lib/tableexport.jquery.plugin/libs/js-xlsx/xlsx.core.min.js"></script>
     <script src="~/lib/bootstrap-table/bootstrap-table.min.js"></script>
-    <script src="~/lib/bootstrap-table/extensions/multiple-sort/bootstrap-table-multiple-sort.min.js"></script> @*It needs to be loaded after bootstrap-table.min.js *@
-    <script src="~/lib/bootstrap-table/extensions/export/bootstrap-table-export.min.js"></script> @* It needs to be loaded after bootstrap-table.min.js *@
-    <script src="~/lib/bootstrap-table/extensions/print/bootstrap-table-print.min.js"></script>  @* It needs to be loaded after bootstrap-table.min.js *@
-    <script src="~/lib/bootstrap-table/extensions/page-jump-to/bootstrap-table-page-jump-to.min.js"></script>  @* It needs to be loaded after bootstrap-table.min.js *@
-    <script src="~/lib/bootstrap-table/extensions/cookie/bootstrap-table-cookie.min.js"></script>@* It needs to be loaded after bootstrap-table.min.js *@
+
+    @* The scripts below need to be loaded after bootstrap-table.min.js *@
+    <script src="~/lib/bootstrap-table/extensions/multiple-sort/bootstrap-table-multiple-sort.min.js"></script>
+    <script src="~/lib/bootstrap-table/extensions/export/bootstrap-table-export.min.js"></script>
+    <script src="~/lib/bootstrap-table/extensions/print/bootstrap-table-print.min.js"></script>
+    <script src="~/lib/bootstrap-table/extensions/page-jump-to/bootstrap-table-page-jump-to.min.js"></script>
+    <script src="~/lib/bootstrap-table/extensions/cookie/bootstrap-table-cookie.min.js"></script>
+    <script src="~/lib/bootstrap-table/extensions/custom-view/bootstrap-table-custom-view.min.js"></script>
 }

@@ -212,6 +212,31 @@
                     </ul>`;
     }
 
+    const shortenText = (text, maxLength) =>
+        text.length <= maxLength ? text : text.slice(0, text.lastIndexOf(' ', maxLength)) + '..';
+
+    window.customViewFormatter = (data) => {
+        let template = $('#profileTemplate').html();
+        let view = '';
+        let images = [
+            'https://robohash.org/68.186.255.198.png',
+            'https://robohash.org/18.146.255.198.png',
+            'https://robohash.org/63.186.255.198.png',
+            'https://robohash.org/68.186.155.198.png'
+        ];
+
+        $.each(data, function (i, row) {
+            view += template.replace('%NAME%', row.Name)
+                .replace('%IMAGE%', images[i%4])
+                .replace('%POS%', row.Position)
+                .replace('%AGE%', row.Age)
+                .replace('%OFFICE%', shortenText(row.Office, 10))
+                .replace('%SALARY%', row.Salary.replace(".00", ""))
+        });
+
+        return `<div class="row mx-0">${view}</div>`;
+    }
+
     window.sendDeleteRequest = (ids) => {
         return new Promise((resolve, reject) => {
             $.ajax({
@@ -224,11 +249,30 @@
             });
         });
     }
+
+    // Init the collapse object for (hide/show)
+    window.bsFormWrapper = new bootstrap.Collapse($("#agentFormWrapper"), {
+        toggle: false
+    });
+
     // Event handlers for edit and delete buttons
     window.actionEvents = {
         'click .edit': function (e, value, row, index) {
             alert('Edit button clicked for: ' + JSON.stringify(row));
-            // Implement your edit logic here
+
+            bsFormWrapper.show();
+            const model = row;
+
+            //Set input field values
+            $("#agentForm input:hidden[name='Id']").val(model["Id"]);
+            $("#agentForm input[name='Name']").val(model["Name"]);
+            $("#agentForm input[name='Position']").val(model["Position"]);
+            $("#agentForm input[name='Office']").val(model["Office"]);
+            $("#agentForm input[name='Age']").val(parseInt(model["Age"]));
+            $("#agentForm input[name='StartDate']").val(model["StartDate"]);
+            $("#agentForm input[name='Salary']").val(Number(model["Salary"].replace(/[^0-9.-]+/g, "")));
+
+            $("#agentsRoot")[0].scrollIntoView({ behavior: 'smooth' });
         },
         'click .delete': function (e, value, row, index) {
             const response = confirm("Are you sure you want to delete the record(s)? This action cannot be undone.");
